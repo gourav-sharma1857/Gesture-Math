@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Math Solver - Gesture Recognition</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="background-animation">
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+        <div class="gradient-orb orb-3"></div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Header Section -->
+        <header class="header">
+            <div class="logo-container">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 5L9 19M15 5L15 19M5 9L19 9M5 15L19 15"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="logo-text">AI Math Solver</h1>
+                    <p class="logo-subtitle">Gesture-Controlled Calculator</p>
+                </div>
+            </div>
+            <div class="status-indicator">
+                <div class="status-dot" id="statusDot"></div>
+                <span class="status-text" id="drawStatus">Drawing: OFF</span>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Problem Display Card -->
+            <section class="card problem-card" id="problemCard">
+                <div class="card-header">
+                    <div class="icon-badge">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                        </svg>
+                    </div>
+                    <h2 class="card-title">Detected Problem</h2>
+                </div>
+                <div class="problem-content">
+                    <p class="problem-text" id="problemText">Draw a math problem to begin...</p>
+                </div>
+                <div class="analyzing-overlay" id="analyzingOverlay">
+                    <div class="spinner"></div>
+                    <p>Analyzing your drawing...</p>
+                </div>
+            </section>
+
+            <!-- Solution Display Card -->
+            <section class="card solution-card" id="solutionCard">
+                <div class="card-header">
+                    <div class="icon-badge solution-badge">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <h2 class="card-title">Solution</h2>
+                    <span class="solution-type-badge" id="solutionTypeBadge"></span>
+                </div>
+                <div class="solution-content" id="solutionContent">
+                    <div class="empty-state">
+                        <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                        </svg>
+                        <p class="empty-text">Make a thumbs-up gesture to solve the problem</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Instructions Card -->
+            <section class="card instructions-card">
+                <div class="card-header">
+                    <div class="icon-badge info-badge">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <h2 class="card-title">How to Use</h2>
+                </div>
+                <div class="instructions-content">
+                    <div class="instruction-item">
+                        <div class="instruction-number">1</div>
+                        <div class="instruction-text">
+                            <strong>Draw</strong>
+                            <span>Use your index finger to draw math problems on screen</span>
+                        </div>
+                    </div>
+                    <div class="instruction-item">
+                        <div class="instruction-number">2</div>
+                        <div class="instruction-text">
+                            <strong>Toggle Drawing</strong>
+                            <span>Press 'S' key to start/stop drawing mode</span>
+                        </div>
+                    </div>
+                    <div class="instruction-item">
+                        <div class="instruction-number">3</div>
+                        <div class="instruction-text">
+                            <strong>Solve</strong>
+                            <span>Make a thumbs-up gesture to analyze and solve</span>
+                        </div>
+                    </div>
+                    <div class="instruction-item">
+                        <div class="instruction-number">4</div>
+                        <div class="instruction-text">
+                            <strong>Clear</strong>
+                            <span>Press 'C' key to clear the canvas and start over</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Powered by Gemini AI • Hand Gesture Recognition</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

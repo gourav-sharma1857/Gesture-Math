@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Connection Test</title>
+</head>
+<body>
+    <h1>Testing Connection to Python</h1>
+    <div id="status">Connecting...</div>
+    <div id="data"></div>
+    
+    <script>
+        setInterval(async () => {
+            try {
+                const response = await fetch('http://localhost:5000/api/status');
+                const data = await response.json();
+                document.getElementById('status').innerHTML = '✅ CONNECTED';
+                document.getElementById('data').innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            } catch (error) {
+                document.getElementById('status').innerHTML = '❌ ERROR: ' + error.message;
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
