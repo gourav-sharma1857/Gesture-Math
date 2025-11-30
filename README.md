@@ -1,5 +1,7 @@
 Math on Fingertips — Air-Writing Finger Tracking Math Solver
 
+<a href="https://youtu.be/huOo5wPQlC4" target="_blank"> <img src="https://img.youtube.com/vi/huOo5wPQlC4/maxresdefault.jpg" alt="Demo Video Preview" style="width:100%; max-width:700px; border-radius:10px;"> </a>
+
 
 This project lets you write math expressions in the air using your index finger, captures the strokes through real-time hand tracking, and sends the drawn equation to an AI backend for solving, graphing, and step-by-step explanations.
 
@@ -220,12 +222,12 @@ Installation
 
 Install dependencies:
 
-pip install flask flask-cors opencv-python mediapipe matplotlib google-generativeai
+        pip install flask flask-cors opencv-python mediapipe matplotlib google-generativeai
 
 
 Run backend:
 
-python python.py
+        python python.py
 
 
 Open index.html in a browser.
