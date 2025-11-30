@@ -3,129 +3,998 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Math Solver - Gesture Recognition</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Gesture Math Solver</title>
+    <link href__="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-dark: #0f0f1a;
+            --bg-card: #1a1a2e;
+            --bg-card-alt: #252542;
+            --bg-input: #0d0d1a;
+            --text-primary: #f0f0ff;
+            --text-secondary: #a0a0c0;
+            --text-muted: #6b6b8a;
+            --accent-purple: #a78bfa;
+            --accent-indigo: #6366f1;
+            --accent-teal: #2dd4bf;
+            --accent-green: #10b981;
+            --accent-yellow: #fde047;
+            --accent-orange: #fb923c;
+            --accent-red: #ef4444;
+            --accent-violet: #8b5cf6;
+            --border-color: #2d2d4a;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #1a1a2e 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        .header-section {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            padding: 20px 30px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--accent-indigo), var(--accent-purple));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .logo-text {
+            font-size: 1.75rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-teal));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: currentColor;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.1); }
+        }
+
+        .status-ready {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-green);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .status-analyzing {
+            background: rgba(253, 224, 71, 0.15);
+            color: var(--accent-yellow);
+            border: 1px solid rgba(253, 224, 71, 0.3);
+        }
+
+        .status-cooldown {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--accent-red);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .status-error {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--accent-red);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+        }
+
+        .main-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 30px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        @media (min-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr 1.5fr;
+            }
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .section-icon {
+            font-size: 1.25rem;
+        }
+
+        .section-header h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            flex: 1;
+        }
+
+        .mode-badge, .type-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .mode-badge {
+            background: var(--accent-indigo);
+            color: white;
+        }
+
+        .mode-badge.graph {
+            background: var(--accent-violet);
+        }
+
+        .type-badge {
+            background: var(--accent-teal);
+            color: #0f0f1a;
+        }
+
+        .canvas-section {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid var(--border-color);
+        }
+
+        .canvas-container {
+            background: var(--bg-input);
+            border: 2px solid var(--accent-indigo);
+            border-radius: 12px;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .canvas-container img {
+            width: 100%;
+            height: 400px;
+            object-fit: contain;
+        }
+
+        .canvas-placeholder {
+            text-align: center;
+            color: var(--text-muted);
+        }
+
+        .placeholder-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .hint {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 8px;
+        }
+
+        .canvas-status {
+            margin-top: 12px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .drawing-on { color: var(--accent-green); }
+        .drawing-off { color: var(--text-muted); }
+
+        .solution-section {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .problem-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid var(--border-color);
+            border-top: 3px solid var(--accent-purple);
+        }
+
+        .problem-display {
+            background: var(--bg-card-alt);
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .problem-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+        }
+
+        /* Graph Card */
+        .graph-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid var(--border-color);
+            border-top: 3px solid var(--accent-violet);
+            display: none;
+        }
+
+        .graph-card.visible {
+            display: block;
+        }
+
+        .graph-container {
+            background: #ffffff;
+            border-radius: 12px;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .graph-container canvas {
+            width: 100%;
+            height: 400px;
+        }
+
+        .graph-equation-label {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(139, 92, 246, 0.9);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            font-family: 'Cambria Math', monospace;
+        }
+
+        .graph-placeholder {
+            text-align: center;
+            color: var(--bg-dark);
+            padding: 40px;
+        }
+
+        .solution-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid var(--border-color);
+            border-top: 3px solid var(--accent-green);
+            flex: 1;
+        }
+
+        .solution-display {
+            background: var(--bg-card-alt);
+            border-radius: '10px';
+            padding: 24px;
+            min-height: 200px;
+        }
+
+        .solution-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* Section header for solution parts */
+        .solution-section-header {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--accent-purple);
+            padding: 10px 0 6px 0;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 8px;
+            margin-top: 12px;
+        }
+
+        .solution-section-header:first-child {
+            margin-top: 0;
+        }
+
+        /* Individual step */
+        .step-item {
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-orange);
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: var(--text-primary);
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+        }
+
+        .step-item strong {
+            color: var(--accent-teal);
+        }
+
+        /* Final Answer - Special Styling */
+        .final-answer-item {
+            padding: 20px 24px;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(45, 212, 191, 0.15));
+            border-radius: 12px;
+            border: 2px solid var(--accent-green);
+            margin-top: 16px;
+        }
+
+        .final-answer-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--accent-green);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .final-answer-label .checkmark {
+            width: 24px;
+            height: 24px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+        }
+
+        .final-answer-content {
+            font-size: 1.5rem;
+            font-weight: 700;
+            line-height: 1.5;
+            color: var(--accent-teal);
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            padding: 10px 0;
+        }
+
+        .empty-solution {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+        }
+
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .instructions-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 20px 24px;
+            border: 1px solid var(--border-color);
+        }
+
+        .instructions-card h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--text-secondary);
+        }
+
+        .instruction-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        @media (min-width: 600px) {
+            .instruction-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .instruction {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: var(--bg-card-alt);
+            border-radius: 8px;
+            font-size: 0.85rem;
+        }
+
+        .instruction .key {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--accent-indigo);
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .error-banner {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(239, 68, 68, 0.95);
+            color: white;
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-weight: 500;
+            box-shadow: 0 4px 20px rgba(239, 68, 68, 0.4);
+            z-index: 1000;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            .logo { flex-direction: column; }
+            .main-content { padding: 16px; }
+            .canvas-container { min-height: 300px; }
+            .problem-text { font-size: 1.1rem; }
+            .step-item { font-size: 1rem; }
+            .final-answer-content { font-size: 1.3rem; }
+        }
+    </style>
 </head>
 <body>
-    <!-- Animated Background -->
-    <div class="background-animation">
-        <div class="gradient-orb orb-1"></div>
-        <div class="gradient-orb orb-2"></div>
-        <div class="gradient-orb orb-3"></div>
-    </div>
-
-    <!-- Main Container -->
-    <div class="container">
-        <!-- Header Section -->
-        <header class="header">
-            <div class="logo-container">
-                <div class="logo-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M9 5L9 19M15 5L15 19M5 9L19 9M5 15L19 15"/>
-                    </svg>
+    <div class="math-solver">
+        <header class="header-section">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">∑</div>
+                    <div>
+                        <h1 class="logo-text">Gesture Math Solver</h1>
+                        <p class="subtitle">Draw equations with your finger, solve with AI</p>
+                    </div>
                 </div>
-                <div>
-                    <h1 class="logo-text">AI Math Solver</h1>
-                    <p class="logo-subtitle">Gesture-Controlled Calculator</p>
+                <div id="statusBadge" class="status-badge status-error">
+                    <span class="status-dot"></span>
+                    <span id="statusText">Connecting...</span>
                 </div>
-            </div>
-            <div class="status-indicator">
-                <div class="status-dot" id="statusDot"></div>
-                <span class="status-text" id="drawStatus">Drawing: OFF</span>
             </div>
         </header>
 
-        <!-- Main Content Area -->
         <main class="main-content">
-            <!-- Problem Display Card -->
-            <section class="card problem-card" id="problemCard">
-                <div class="card-header">
-                    <div class="icon-badge">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
-                        </svg>
+            <section class="canvas-section">
+                <div class="section-header">
+                    <span class="section-icon">✏️</span>
+                    <h2>Drawing Canvas</h2>
+                </div>
+                <div class="canvas-container">
+                    <img id="canvasImage" src="" alt="Drawing Canvas" style="display: none;">
+                    <div id="canvasPlaceholder" class="canvas-placeholder">
+                        <div class="placeholder-icon">👆</div>
+                        <p>Awaiting webcam feed...</p>
+                        <p class="hint">Run your Python script to start</p>
                     </div>
-                    <h2 class="card-title">Detected Problem</h2>
                 </div>
-                <div class="problem-content">
-                    <p class="problem-text" id="problemText">Draw a math problem to begin...</p>
-                </div>
-                <div class="analyzing-overlay" id="analyzingOverlay">
-                    <div class="spinner"></div>
-                    <p>Analyzing your drawing...</p>
-                </div>
-            </section>
-
-            <!-- Solution Display Card -->
-            <section class="card solution-card" id="solutionCard">
-                <div class="card-header">
-                    <div class="icon-badge solution-badge">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                    </div>
-                    <h2 class="card-title">Solution</h2>
-                    <span class="solution-type-badge" id="solutionTypeBadge"></span>
-                </div>
-                <div class="solution-content" id="solutionContent">
-                    <div class="empty-state">
-                        <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
-                        </svg>
-                        <p class="empty-text">Make a thumbs-up gesture to solve the problem</p>
-                    </div>
+                <div class="canvas-status">
+                    <span id="drawingStatus" class="drawing-off">○ Drawing Paused</span>
                 </div>
             </section>
 
-            <!-- Instructions Card -->
-            <section class="card instructions-card">
-                <div class="card-header">
-                    <div class="icon-badge info-badge">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
+            <section class="solution-section">
+                <div class="problem-card">
+                    <div class="section-header">
+                        <span class="section-icon">📝</span>
+                        <h2>Detected Problem</h2>
+                        <span id="modeBadge" class="mode-badge">SOLVE</span>
                     </div>
-                    <h2 class="card-title">How to Use</h2>
+                    <div class="problem-display">
+                        <p id="problemText" class="problem-text">Draw a math problem to begin...</p>
+                    </div>
                 </div>
-                <div class="instructions-content">
-                    <div class="instruction-item">
-                        <div class="instruction-number">1</div>
-                        <div class="instruction-text">
-                            <strong>Draw</strong>
-                            <span>Use your index finger to draw math problems on screen</span>
+
+                <!-- Graph Card -->
+                <div id="graphCard" class="graph-card">
+                    <div class="section-header">
+                        <span class="section-icon">📈</span>
+                        <h2>Graph</h2>
+                        <span class="mode-badge graph">GRAPH MODE</span>
+                    </div>
+                    <div class="graph-container">
+                        <canvas id="graphCanvas" width="600" height="400"></canvas>
+                        <div id="graphEquationLabel" class="graph-equation-label" style="display: none;"></div>
+                        <div id="graphPlaceholder" class="graph-placeholder">
+                            <div style="font-size: 48px; margin-bottom: 16px;">📊</div>
+                            <p>Graph will appear here</p>
+                            <p class="hint">Draw an equation and make a thumbs-up gesture</p>
                         </div>
                     </div>
-                    <div class="instruction-item">
-                        <div class="instruction-number">2</div>
-                        <div class="instruction-text">
-                            <strong>Toggle Drawing</strong>
-                            <span>Press 'S' key to start/stop drawing mode</span>
+                </div>
+
+                <div class="solution-card">
+                    <div class="section-header">
+                        <span class="section-icon">✓</span>
+                        <h2>Solution</h2>
+                        <span id="typeBadge" class="type-badge" style="display: none;"></span>
+                    </div>
+                    <div id="solutionDisplay" class="solution-display">
+                        <div class="empty-solution">
+                            <div class="empty-icon">👍</div>
+                            <p>Make a thumbs-up gesture to solve</p>
+                            <p class="hint">Draw your equation first, then hold thumb up</p>
                         </div>
                     </div>
-                    <div class="instruction-item">
-                        <div class="instruction-number">3</div>
-                        <div class="instruction-text">
-                            <strong>Solve</strong>
-                            <span>Make a thumbs-up gesture to analyze and solve</span>
+                </div>
+
+                <div class="instructions-card">
+                    <h3>Quick Guide</h3>
+                    <div class="instruction-grid">
+                        <div class="instruction">
+                            <span class="key">☝️</span>
+                            <span>Index finger to draw</span>
                         </div>
-                    </div>
-                    <div class="instruction-item">
-                        <div class="instruction-number">4</div>
-                        <div class="instruction-text">
-                            <strong>Clear</strong>
-                            <span>Press 'C' key to clear the canvas and start over</span>
+                        <div class="instruction">
+                            <span class="key">👍</span>
+                            <span>Thumb up to solve</span>
+                        </div>
+                        <div class="instruction">
+                            <span class="key">S</span>
+                            <span>Toggle drawing</span>
+                        </div>
+                        <div class="instruction">
+                            <span class="key">C</span>
+                            <span>Clear canvas</span>
                         </div>
                     </div>
                 </div>
             </section>
         </main>
 
-        <!-- Footer -->
-        <footer class="footer">
-            <p>Powered by Gemini AI • Hand Gesture Recognition</p>
-        </footer>
+        <div id="errorBanner" class="error-banner" style="display: none;">
+            <span>⚠️ Cannot connect to Python backend</span>
+        </div>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+    const statusBadge = document.getElementById('statusBadge');
+    const statusText = document.getElementById('statusText');
+    const canvasImage = document.getElementById('canvasImage');
+    const canvasPlaceholder = document.getElementById('canvasPlaceholder');
+    const drawingStatus = document.getElementById('drawingStatus');
+    const modeBadge = document.getElementById('modeBadge');
+    const problemText = document.getElementById('problemText');
+    const typeBadge = document.getElementById('typeBadge');
+    const solutionDisplay = document.getElementById('solutionDisplay');
+    const errorBanner = document.getElementById('errorBanner');
+    const graphCard = document.getElementById('graphCard');
+    const graphCanvas = document.getElementById('graphCanvas');
+    const graphPlaceholder = document.getElementById('graphPlaceholder');
+    const graphEquationLabel = document.getElementById('graphEquationLabel');
+
+    let lastPlottedEquation = '';
+
+    function formatMathText(text) {
+    if (!text) return '';
+    
+    let formatted = text;
+    formatted = formatted.replace(/\$\$/g, '');
+    formatted = formatted.replace(/\$/g, '');
+    formatted = formatted.replace(/\\frac\{([^}]+)\}\{([^}]+)\}/g, '($1)/($2)');
+    formatted = formatted.replace(/\\sqrt\{([^}]+)\}/g, '√($1)');
+    formatted = formatted.replace(/\\sqrt/g, '√');
+    formatted = formatted.replace(/\^{2}/g, '²');
+    formatted = formatted.replace(/\^2/g, '²');
+    formatted = formatted.replace(/\^{3}/g, '³');
+    formatted = formatted.replace(/\^3/g, '³');
+    formatted = formatted.replace(/\^{([^}]+)}/g, '^($1)');
+    formatted = formatted.replace(/\\times/g, '×');
+    formatted = formatted.replace(/\\cdot/g, '·');
+    formatted = formatted.replace(/\\div/g, '÷');
+    formatted = formatted.replace(/\\pm/g, '±');
+    formatted = formatted.replace(/\\neq/g, '≠');
+    formatted = formatted.replace(/\\leq/g, '≤');
+    formatted = formatted.replace(/\\geq/g, '≥');
+    formatted = formatted.replace(/\\approx/g, '≈');
+    formatted = formatted.replace(/\\infty/g, '∞');
+    formatted = formatted.replace(/\\pi/g, 'π');
+    formatted = formatted.replace(/\\theta/g, 'θ');
+    formatted = formatted.replace(/\\alpha/g, 'α');
+    formatted = formatted.replace(/\\beta/g, 'β');
+    formatted = formatted.replace(/\\sum/g, 'Σ');
+    formatted = formatted.replace(/\\int/g, '∫');
+    formatted = formatted.replace(/\\partial/g, '∂');
+    formatted = formatted.replace(/\\rightarrow/g, '→');
+    formatted = formatted.replace(/\\Rightarrow/g, '⇒');
+    formatted = formatted.replace(/\\therefore/g, '∴');
+    // Convert trig functions from LaTeX to readable format
+    formatted = formatted.replace(/\\sin/g, 'sin');
+    formatted = formatted.replace(/\\cos/g, 'cos');
+    formatted = formatted.replace(/\\tan/g, 'tan');
+    formatted = formatted.replace(/\\cot/g, 'cot');
+    formatted = formatted.replace(/\\sec/g, 'sec');
+    formatted = formatted.replace(/\\csc/g, 'csc');
+    formatted = formatted.replace(/\\arcsin/g, 'arcsin');
+    formatted = formatted.replace(/\\arccos/g, 'arccos');
+    formatted = formatted.replace(/\\arctan/g, 'arctan');
+    formatted = formatted.replace(/\\sinh/g, 'sinh');
+    formatted = formatted.replace(/\\cosh/g, 'cosh');
+    formatted = formatted.replace(/\\tanh/g, 'tanh');
+    formatted = formatted.replace(/\\log/g, 'log');
+    formatted = formatted.replace(/\\ln/g, 'ln');
+    formatted = formatted.replace(/\\exp/g, 'exp');
+    // Remove any remaining LaTeX commands (but AFTER converting the important ones above)
+    formatted = formatted.replace(/\\[a-zA-Z]+/g, '');
+    formatted = formatted.replace(/\{/g, '(');
+    formatted = formatted.replace(/\}/g, ')');
+    formatted = formatted.replace(/\s+/g, ' ');
+    
+    return formatted.trim();
+    }
+
+    function plotGraph(equation) {
+        if (!equation || equation === lastPlottedEquation) return;
+        
+        lastPlottedEquation = equation;
+        const ctx = graphCanvas.getContext('2d');
+        const width = graphCanvas.width;
+        const height = graphCanvas.height;
+        
+        // Clear canvas
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, width, height);
+        
+        // Graph settings
+        const xMin = -10, xMax = 10;
+        const yMin = -10, yMax = 10;
+        const xScale = width / (xMax - xMin);
+        const yScale = height / (yMax - yMin);
+        
+        const toCanvasX = (x) => (x - xMin) * xScale;
+        const toCanvasY = (y) => height - (y - yMin) * yScale;
+        
+        // Draw grid
+        ctx.strokeStyle = '#e0e0e0';
+        ctx.lineWidth = 1;
+        
+        for (let x = Math.ceil(xMin); x <= xMax; x++) {
+            ctx.beginPath();
+            ctx.moveTo(toCanvasX(x), 0);
+            ctx.lineTo(toCanvasX(x), height);
+            ctx.stroke();
+        }
+        
+        for (let y = Math.ceil(yMin); y <= yMax; y++) {
+            ctx.beginPath();
+            ctx.moveTo(0, toCanvasY(y));
+            ctx.lineTo(width, toCanvasY(y));
+            ctx.stroke();
+        }
+        
+        // Draw axes
+        ctx.strokeStyle = '#333333';
+        ctx.lineWidth = 2;
+        
+        ctx.beginPath();
+        ctx.moveTo(0, toCanvasY(0));
+        ctx.lineTo(width, toCanvasY(0));
+        ctx.stroke();
+        
+        ctx.beginPath();
+        ctx.moveTo(toCanvasX(0), 0);
+        ctx.lineTo(toCanvasX(0), height);
+        ctx.stroke();
+        
+        // Draw axis labels
+        ctx.fillStyle = '#333333';
+        ctx.font = '12px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        
+        for (let x = Math.ceil(xMin); x <= xMax; x++) {
+            if (x !== 0) ctx.fillText(x.toString(), toCanvasX(x), toCanvasY(0) + 15);
+        }
+        
+        ctx.textAlign = 'right';
+        for (let y = Math.ceil(yMin); y <= yMax; y++) {
+            if (y !== 0) ctx.fillText(y.toString(), toCanvasX(0) - 5, toCanvasY(y) + 4);
+        }
+        
+        // Convert equation to JavaScript-safe format
+        let jsEquation = equation
+            // Handle trig functions
+            .replace(/\bsin\s*\(/gi, 'Math.sin(')
+            .replace(/\bcos\s*\(/gi, 'Math.cos(')
+            .replace(/\btan\s*\(/gi, 'Math.tan(')
+            .replace(/\basin\s*\(/gi, 'Math.asin(')
+            .replace(/\bacos\s*\(/gi, 'Math.acos(')
+            .replace(/\batan\s*\(/gi, 'Math.atan(')
+            .replace(/\bsinh\s*\(/gi, 'Math.sinh(')
+            .replace(/\bcosh\s*\(/gi, 'Math.cosh(')
+            .replace(/\btanh\s*\(/gi, 'Math.tanh(')
+            .replace(/\bcot\s*\(/gi, '(1/Math.tan(')
+            .replace(/\bsec\s*\(/gi, '(1/Math.cos(')
+            .replace(/\bcsc\s*\(/gi, '(1/Math.sin(')
+            // Handle other math functions
+            .replace(/\bsqrt\s*\(/gi, 'Math.sqrt(')
+            .replace(/\babs\s*\(/gi, 'Math.abs(')
+            .replace(/\blog\s*\(/gi, 'Math.log10(')
+            .replace(/\blog10\s*\(/gi, 'Math.log10(')
+            .replace(/\bln\s*\(/gi, 'Math.log(')
+            .replace(/\bexp\s*\(/gi, 'Math.exp(')
+            .replace(/\bfloor\s*\(/gi, 'Math.floor(')
+            .replace(/\bceil\s*\(/gi, 'Math.ceil(')
+            // Handle constants
+            .replace(/\bpi\b/gi, 'Math.PI')
+            .replace(/\be\b(?!\w)/g, 'Math.E')
+            // Handle power notation
+            .replace(/\^/g, '**')
+            // Handle implicit multiplication
+            .replace(/(\d)([a-zA-Z])/g, '$1*$2')
+            .replace(/(\))(\()/g, '$1*$2')
+            .replace(/(\d)(\()/g, '$1*$2')
+            .replace(/(\))([a-zA-Z])/g, '$1*$2')
+            .replace(/(\))(\d)/g, '$1*$2');
+        
+        // Fix double Math.Math issue
+        jsEquation = jsEquation.replace(/Math\.Math\./g, 'Math.');
+        
+        console.log('Original equation:', equation);
+        console.log('Converted equation:', jsEquation);
+        
+        // Plot the function
+        try {
+            const fn = new Function('x', `return ${jsEquation}`);
+            
+            ctx.strokeStyle = '#8b5cf6';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            
+            let firstPoint = true;
+            const step = (xMax - xMin) / 500;
+            let prevY = null;
+            
+            for (let x = xMin; x <= xMax; x += step) {
+                try {
+                    const y = fn(x);
+                    
+                    if (!isFinite(y) || isNaN(y) || y > 100 || y < -100) {
+                        firstPoint = true;
+                        prevY = null;
+                        continue;
+                    }
+                    
+                    if (prevY !== null && Math.abs(y - prevY) > 10) {
+                        firstPoint = true;
+                    }
+                    
+                    const canvasX = toCanvasX(x);
+                    const canvasY = toCanvasY(y);
+                    
+                    if (firstPoint) {
+                        ctx.moveTo(canvasX, canvasY);
+                        firstPoint = false;
+                    } else {
+                        ctx.lineTo(canvasX, canvasY);
+                    }
+                    
+                    prevY = y;
+                } catch (e) {
+                    firstPoint = true;
+                    prevY = null;
+                }
+            }
+            
+            ctx.stroke();
+            
+            graphEquationLabel.textContent = `y = ${equation}`;
+            graphEquationLabel.style.display = 'block';
+            graphPlaceholder.style.display = 'none';
+            
+        } catch (e) {
+            console.error('Error plotting graph:', e, 'Equation:', jsEquation);
+            graphPlaceholder.innerHTML = `<div style="font-size: 48px; margin-bottom: 16px;">⚠️</div><p>Could not plot: ${equation}</p><p class="hint">Error: ${e.message}</p>`;
+            graphPlaceholder.style.display = 'block';
+            graphEquationLabel.style.display = 'none';
+        }
+    }
+
+    function renderSolution(solutionText) {
+        if (!solutionText || solutionText.trim() === '') {
+            return `<div class="empty-solution"><div class="empty-icon">👍</div><p>Make a thumbs-up gesture to solve</p><p class="hint">Draw your equation first, then hold thumb up</p></div>`;
+        }
+
+        const formatted = formatMathText(solutionText);
+        
+        let sections = formatted.split(/###\s*/);
+        let html = '<div class="solution-steps">';
+        let finalAnswer = null;
+
+        for (let section of sections) {
+            section = section.trim();
+            if (!section) continue;
+
+            const lines = section.split(/\n/).map(l => l.trim()).filter(l => l.length > 0);
+            
+            if (lines.length === 0) continue;
+
+            const firstLine = lines[0];
+            const isHeader = /^[A-Z][a-zA-Z\s\(\)]+$/.test(firstLine) && firstLine.length < 60 && lines.length > 1;
+            
+            if (isHeader) {
+                html += `<div class="solution-section-header">${firstLine}</div>`;
+                lines.shift();
+            }
+
+            for (const line of lines) {
+                if (/^(final\s*answer|answer\s*is|solution\s*is|therefore|thus|hence|∴|the\s+solution)/i.test(line)) {
+                    const match = line.match(/^(final\s*answer|answer\s*is|solution\s*is|therefore|thus|hence|∴|the\s+solution)[:\s]*/i);
+                    finalAnswer = match ? line.substring(match[0].length).trim() : line;
+                    if (!finalAnswer) finalAnswer = line;
+                    continue;
+                }
+
+                const formattedLine = line
+                    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+                    .replace(/\*([^*]+)\*/g, '<em>$1</em>');
+                
+                if (line.length > 5) {
+                    html += `<div class="step-item">${formattedLine}</div>`;
+                }
+            }
+        }
+
+        if (finalAnswer) {
+            html += `
+                <div class="final-answer-item">
+                    <div class="final-answer-label">
+                        <span class="checkmark">✓</span>
+                        Final Answer
+                    </div>
+                    <div class="final-answer-content">${finalAnswer}</div>
+                </div>
+            `;
+        }
+
+        html += '</div>';
+        return html;
+    }
+
+    function updateUI(data) {
+        statusBadge.className = 'status-badge';
+        if (data.analyzing) {
+            statusBadge.classList.add('status-analyzing');
+            statusText.textContent = 'ANALYZING... Processing your equation';
+        } else if (data.cooldown) {
+            statusBadge.classList.add('status-cooldown');
+            statusText.textContent = 'COOLDOWN - Wait before next gesture';
+        } else {
+            statusBadge.classList.add('status-ready');
+            statusText.textContent = `READY - Drawing: ${data.drawing_active ? 'ON' : 'OFF'}`;
+        }
+        
+        if (data.drawing_canvas_b64) {
+            canvasImage.src = `data:image/png;base64,${data.drawing_canvas_b64}`;
+            canvasImage.style.display = 'block';
+            canvasPlaceholder.style.display = 'none';
+        }
+        
+        drawingStatus.className = data.drawing_active ? 'drawing-on' : 'drawing-off';
+        drawingStatus.textContent = data.drawing_active ? '● Drawing Mode ON' : '○ Drawing Paused (Press S)';
+        
+        const mode = data.operation_mode || 'SOLVE';
+        modeBadge.textContent = mode;
+        modeBadge.className = mode === 'GRAPH' ? 'mode-badge graph' : 'mode-badge';
+        
+        problemText.textContent = formatMathText(data.problem) || 'Draw a math problem to begin...';
+        
+        if (data.solution_type) {
+            typeBadge.textContent = data.solution_type;
+            typeBadge.style.display = 'inline-block';
+        } else {
+            typeBadge.style.display = 'none';
+        }
+        
+        const isGraphMode = mode === 'GRAPH';
+        const hasPlottableEquation = data.plottable_equation && data.plottable_equation.trim().length > 0;
+        
+        if (isGraphMode) {
+            graphCard.classList.add('visible');
+            
+            if (hasPlottableEquation) {
+                plotGraph(data.plottable_equation);
+            } else {
+                graphPlaceholder.innerHTML = `<div style="font-size: 48px; margin-bottom: 16px;">📊</div><p>Graph will appear here</p><p class="hint">Draw an equation and make a thumbs-up gesture</p>`;
+                graphPlaceholder.style.display = 'block';
+                graphEquationLabel.style.display = 'none';
+                lastPlottedEquation = '';
+            }
+        } else {
+            graphCard.classList.remove('visible');
+            lastPlottedEquation = '';
+        }
+        
+        solutionDisplay.innerHTML = renderSolution(data.solution_text);
+        
+        errorBanner.style.display = 'none';
+    }
+
+    function showError() {
+        statusBadge.className = 'status-badge status-error';
+        statusText.textContent = 'ERROR: Cannot connect to backend';
+        errorBanner.style.display = 'block';
+    }
+
+    async function pollForUpdates() {
+        try {
+            const response = await fetch('http://localhost:5000/api/status');
+            const data = await response.json();
+            updateUI(data);
+        } catch (error) {
+            showError();
+        }
+    }
+
+    setInterval(pollForUpdates, 100);
+    pollForUpdates();
+</script>
 </body>
 </html>
