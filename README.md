@@ -1,26 +1,32 @@
 Math on Fingertips — Air-Writing Finger Tracking Math Solver
 
+
 This project lets you write math expressions in the air using your index finger, captures the strokes through real-time hand tracking, and sends the drawn equation to an AI backend for solving, graphing, and step-by-step explanations.
 
 The project combines computer vision, gesture tracking, and AI reasoning to build an interface that feels both intuitive and futuristic.
+
 
 Inspiration
 
 This idea started when I wanted a more natural and playful way to interact with math problems. Typing formulas feels strict and slow.
 Drawing them in space with your fingertip felt more expressive.
 
+
 However, building stable fingertip tracking turned out to be far more complex than I expected.
 This project became a deep exploration into:
 
-how hand-landmark models behave in real-time,
+    how hand-landmark models behave in real-time,
 
-how to stabilize noisy fingertip predictions,
+    how to stabilize noisy fingertip predictions,
 
-how to merge strokes correctly, and
+    how to merge strokes correctly, and
 
-how to handle the imperfections of camera input.
+    how to handle the imperfections of camera input.
+    
 
 The technical journey—especially fixing jitter, misdetections, and tracking gaps—shaped the project into what it is now.
+
+
 
 How Finger Tracking Works
 
@@ -33,23 +39,23 @@ Each frame is processed immediately and fed into a hand-tracking model.
 
 MediaPipe predicts 21 landmarks per hand, including:
 
-index finger tip
+    index finger tip
 
-knuckles
+    knuckles
 
-palm center
+    palm center
 
-wrist
+    wrist
 
 The model is robust, but not perfect. It can:
 
-flicker under poor lighting
+    flicker under poor lighting
 
-lose tracking when the finger rotates
+    lose tracking when the finger rotates
 
-mis-detect depth
+    mis-detect depth
 
-momentarily jump between frames
+    momentarily jump between frames
 
 
 3. Extracting the Index Fingertip
@@ -73,103 +79,108 @@ A moving-average or exponential smoothing filter reduces jitter, so strokes look
 
 Without smoothing:
 
-lines jump
+    lines jump
 
-curves look broken
+    curves look broken
 
-strokes become messy
+    strokes become messy
 
 With smoothing:
 
-the fingertip appears steady
+    the fingertip appears steady
 
-writing becomes readable
+    writing becomes readable
+    
 
 5. Stroke Building
 
 The program builds strokes by tracking:
 
-when a finger is “down”
+    when a finger is “down”
 
-when it lifts
+    when it lifts
 
-how fast it is moving
+    how fast it is moving
 
-how far two consecutive points are from each other
+    how far two consecutive points are from each other
 
 Strokes are stored as arrays of points.
 This enables:
 
-undo
+    undo
 
-redo
+    redo
 
-clearing
+    clearing
 
-sending the entire stroke history to the backend
+    sending the entire stroke history to the backend
+    
 
 Challenges Solved
 
-The hand tracking layer required solving multiple issues:
+    The hand tracking layer required solving multiple issues:
 
-Jitter: fixed with smoothing filters
+    Jitter: fixed with smoothing filters
 
-False detections: removed with distance checks and frame-consistency tests
+    False detections: removed with distance checks and frame-consistency tests
 
-Missing frames: interpolated to keep strokes continuous
+    Missing frames: interpolated to keep strokes continuous
 
-Lag from model inference: optimized by reducing resolution
+    Lag from model inference: optimized by reducing resolution
 
-Finger rotating away from the camera: handled with fallback detection
+    Finger rotating away from the camera: handled with fallback detection
 
-Stroke cutting: fixed by tracking “writing state” vs “idle state”
+    Stroke cutting: fixed by tracking “writing state” vs “idle state”
 
 Much of the project’s complexity came from stabilizing these behaviors.
+
 
 
 Backend Overview
 
 The backend is a Python Flask server that:
 
-receives stroke data
+    receives stroke data
 
-converts strokes into an equation image
+    converts strokes into an equation image
 
-sends a structured prompt to the AI model
+    sends a structured prompt to the AI model
 
-handles step-by-step solutions
+    handles step-by-step solutions
 
-computes derivatives or integrals
+    computes derivatives or integrals
 
-generates graphs
+    generates graphs
 
-returns everything to the frontend as JSON
+    returns everything to the frontend as JSON
 
 This backend runs exactly as it does locally and can be deployed on Render.
+
 
 
 Frontend Overview
 
 The frontend is an HTML + JS interface that:
 
-displays the canvas
+    displays the canvas
 
-shows the hand-drawn strokes
+    shows the hand-drawn strokes
 
-formats the returned math
+    formats the returned math
 
-shows graphs
+    shows graphs
 
 provides keyboard shortcuts for:
 
-G (graph)
-D (derivative)
-I (integral)
-Z (clear)
-F (fullscreen)
-S (Stop drawing)
+    G (graph)
+    D (derivative)
+    I (integral)
+    Z (clear)
+    F (fullscreen)
+    S (Stop drawing)
 
 The front and back communicate through a simple fetch API.
+
 
 Tech Stack
 
@@ -180,29 +191,30 @@ Custom smoothing filters
 Stroke segmentation logic
 
 Backend
-Python
-Flask
-Matplotlib
-Gemini API
+
+    Python
+    Flask
+    Matplotlib
+    Gemini API
 
 Frontend
 
-HTML
-CSS
-JavaScript
-MathJax
+    HTML
+    CSS
+    JavaScript
+    MathJax
 
 Features
 
-Real-time fingertip tracking
-Smooth stroke rendering
-Undo and redo
-Drawing in the air
-Automatic equation solving
-Graph generation
-Step-by-step explanations
-Keyboard shortcuts
-Fullscreen canvas mode
+    Real-time fingertip tracking
+    Smooth stroke rendering
+    Undo and redo
+    Drawing in the air
+    Automatic equation solving
+    Graph generation
+    Step-by-step explanations
+    Keyboard shortcuts
+    Fullscreen canvas mode
 
 Installation
 
